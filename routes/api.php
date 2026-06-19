@@ -2,13 +2,80 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ActualiteController;
 use App\Http\Controllers\BenevoleController;
 use App\Http\Controllers\AssociationController;
-use App\Http\Controllers\ActualiteController;
+use App\Http\Controllers\MissionController;
+use App\Http\Controllers\CandidatureController;
+use App\Http\Controllers\SessionController;
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PassBenevoleController;
+
+// --- PROJET DE SYNTHÈSE (Gestion Bénévoles) ---
+
+Route::post('/login', [SessionController::class, 'login']);
+Route::post('/inscription-benevole', [BenevoleController::class, 'store']);
+Route::post('/inscription-association', [AssociationController::class, 'store']);
 
 
+Route::middleware('auth:sanctum')->group(function () {
+
+    // 1. Route pour les bénévoles (Missions actives & disponibles)
+    Route::get('/missions/actives', [MissionController::class, 'getMissionsActives']);
+
+    // 2. Route pour l'association 
+    // Route::get('/missions/association/{association_id}', [MissionController::class, 'getMissionsAssociation']);
+
+    // 3. Route pour archiver une mission 
+    Route::put('/missions/{id}/archiver', [MissionController::class, 'archiverMission']);
+
+    Route::get('/missions', [MissionController::class, 'index']);
+    Route::get('/missions/{id}', [MissionController::class, 'show']);
+    Route::get('/missions/association/{id}', [MissionController::class, 'getByAssociation']);
+
+    Route::get('/candidatures/{id}/pass-pdf', [PassBenevoleController::class, 'generate']);
+    Route::post('/logout', [SessionController::class, 'logout']);
+
+    Route::post('/candidatures', [CandidatureController::class, 'store']);
+    Route::get('/candidatures/benevole/{id}', [CandidatureController::class, 'getBenevoleCandidatures']);
+    Route::get('/candidatures/association/{association_id}', [CandidatureController::class, 'getAssociationDemandes']);
+    Route::put('/candidatures/{id}/statut', [CandidatureController::class, 'updateStatut']);
+
+    //Profile 
+    Route::get('/benevole/profile', [BenevoleController::class, 'getProfile']);
+    Route::post('/benevole/profile', [BenevoleController::class, 'update']);
+    Route::put('benevole/profile', [BenevoleController::class, 'update']);
+
+    Route::get('/association/profile', [AssociationController::class, 'getProfile']);
+    Route::post('/association/profile', [AssociationController::class, 'update']);
+
+    // Association
+    Route::middleware('role:association')->group(function () {
+        Route::get('/dashboard-association', [AssociationController::class, 'getData']);
+        Route::post('/missions', [MissionController::class, 'store']);
+        Route::put('/missions/{id}', [MissionController::class, 'update']);
+        Route::delete('/missions/{id}', [MissionController::class, 'destroy']);
+    });
+
+    // Benevole
+    Route::middleware('role:benevole')->group(function () {
+        Route::get('/dashboard-benevole', [BenevoleController::class, 'getData']);
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
+    // --- PROJET DE STAGE (Site Vitrine) ---
+/*
 
 // Routes publiques (Tout le monde peut voir)
 Route::get('/actualites', [ActualiteController::class, 'index']);
@@ -20,22 +87,10 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/actualites/{id}', [ActualiteController::class, 'update']);
     Route::put('/actualites/{id}', [ActualiteController::class, 'update']);
     Route::delete('/actualites/{id}', [ActualiteController::class, 'destroy']);
-
-
-Route::post('/inscription-benevole', [BenevoleController::class, 'store']);
-Route::post('/inscription-association', [AssociationController::class, 'store']); 
-Route::middleware(['auth:sanctum', 'role:association'])->group(function () {
-    Route::get('/dashboard-association', [AssociationController::class, 'getData']); 
-});
-Route::middleware(['auth:sanctum', 'role:benevole'])->group(function () {
-    Route::get('/dashboard-benevole', [AssociationController::class, 'getData']); 
-});
-
+    
     Route::post('/logout', [AuthController::class, 'logout']);
-});
+    });
+    // Inscriptions (Public)
+    Route::post('/login', [AuthController::class, 'login']);
 
-// Inscriptions (Public)
-Route::post('/inscription-benevole', [BenevoleController::class, 'store']);
-Route::post('/inscription-association', [AssociationController::class, 'store']);
-Route::post('/login', [AuthController::class, 'login']);
-
+*/

@@ -18,13 +18,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-      protected $fillable = ['name', 'email', 'password', 'is_admin'];
-
-
-    function demandes(){
-        return $this->hasMany(Demande::class);
-    }
-
+      protected $fillable = ['name', 'email', 'password'];
 
     // function demande(){
     //     return $this->hasMany(Demande::class);

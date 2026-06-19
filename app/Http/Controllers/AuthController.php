@@ -18,7 +18,7 @@ class AuthController extends Controller
             return response(['message' => 'Identifiants incorrects'], 401);
         }
 
-        if ($user->is_admin !== 1) {
+        if (!$user->is_admin) {
         return response([
             'message' => 'Accès refusé : vous n\'êtes pas administrateur'
         ], 403);
@@ -32,8 +32,7 @@ class AuthController extends Controller
         ], 201);
 
     }
-
-
+    
     public function logout(Request $request) {
         auth()->user()->tokens()->delete();
         return ['message' => 'Déconnecté'];

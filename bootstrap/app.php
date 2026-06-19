@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Foundation\Application;
@@ -11,36 +12,22 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         api: __DIR__.'/../routes/api.php',
     )
-
-    ->withMiddleware(function (Middleware $middleware): void {
-    //     $middleware->alias([
-    //     'check.age' => \App\Http\Middleware\CheckAge::class,
-    // ]);
-
-
-        // $middleware->statefulApi();
-        // $middleware->alias([
-        //     'role' => \App\Http\Middleware\CheckRole::class,
-        // ]);
-
-
-        $middleware->validateCsrfTokens(except: [
-        'api/inscription-association', // <--- Zidi hada ghir bach n-t-7eqqo
-    ]);
-        $middleware->validateCsrfTokens(except: [
-        'api/dashboard-benevole', // <--- Zidi hada ghir bach n-t-7eqqo
-    ]);
-
-    })
-
-   
-
     ->withMiddleware(function (Middleware $middleware) {
-    $middleware->alias([
-        'admin' => \App\Http\Middleware\AdminMiddleware::class,
-    ]);
-})
+        // ✅ Aliases dyalk kollhom hna
+        $middleware->alias([
+            'role'  => \App\Http\Middleware\RoleMiddleware::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        ]);
 
+        // ✅ CSRF exceptions
+        $middleware->validateCsrfTokens(except: [
+            'api/inscription-association',
+            'api/dashboard-benevole',
+        ]);
+    })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
+
+
+

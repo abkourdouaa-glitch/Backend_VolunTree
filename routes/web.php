@@ -12,7 +12,9 @@ use App\Http\Controllers\PieceController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PersonneController;
+use App\Http\Controllers\StageController;
 
+Route::resource('/stages', StageController::class);
 Route::resource('/personne', PersonneController::class);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

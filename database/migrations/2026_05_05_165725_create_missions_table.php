@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('associations', function (Blueprint $table) {
+        Schema::create('missions', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('ville');
+            $table->string('titre');
             $table->text('description');
-            $table->string('recepisse')->nullable();
-            $table->string('role')->default('association');
+            $table->date('date');
+            $table->integer('n_benevoles');
+            $table->string('lieu');
+            $table->enum('categorie',['education','social','sante','culture','envirennement']);
+            $table->foreignId('association_id')->constrained('associations')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('associations');
+        Schema::dropIfExists('missions');
     }
 };

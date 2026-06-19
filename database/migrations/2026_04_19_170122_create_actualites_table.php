@@ -20,7 +20,14 @@ return new class extends Migration
             $table->timestamps(); 
         });
     }
-
+        
+        //             Schema::create('tasks', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->text('desc');
+        //     $table->enum('status',['en cours','terminer'])->default('en cours');
+        //     $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        //     $table->timestamps();
+        // });
     /**
      * Reverse the migrations.
      */
