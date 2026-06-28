@@ -8,7 +8,7 @@ use App\Models\Benevole;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class SessionController extends Controller
+class TokenController extends Controller
 {
     public function login(Request $request)
     {

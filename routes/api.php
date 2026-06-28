@@ -8,34 +8,32 @@ use App\Http\Controllers\BenevoleController;
 use App\Http\Controllers\AssociationController;
 use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CandidatureController;
-use App\Http\Controllers\SessionController;
+use App\Http\Controllers\TokenController;
 
 use App\Http\Controllers\PassBenevoleController;
 
 // --- PROJET DE SYNTHÈSE (Gestion Bénévoles) ---
 
-Route::post('/login', [SessionController::class, 'login']);
+Route::post('/login', [TokenController::class, 'login']);
 Route::post('/inscription-benevole', [BenevoleController::class, 'store']);
 Route::post('/inscription-association', [AssociationController::class, 'store']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
-
-    // 1. Route pour les bénévoles (Missions actives & disponibles)
+    
     Route::get('/missions/actives', [MissionController::class, 'getMissionsActives']);
-
-    // 2. Route pour l'association 
-    // Route::get('/missions/association/{association_id}', [MissionController::class, 'getMissionsAssociation']);
-
-    // 3. Route pour archiver une mission 
     Route::put('/missions/{id}/archiver', [MissionController::class, 'archiverMission']);
+
 
     Route::get('/missions', [MissionController::class, 'index']);
     Route::get('/missions/{id}', [MissionController::class, 'show']);
     Route::get('/missions/association/{id}', [MissionController::class, 'getByAssociation']);
+    
+
+    
 
     Route::get('/candidatures/{id}/pass-pdf', [PassBenevoleController::class, 'generate']);
-    Route::post('/logout', [SessionController::class, 'logout']);
+    Route::post('/logout', [TokenController::class, 'logout']);
 
     Route::post('/candidatures', [CandidatureController::class, 'store']);
     Route::get('/candidatures/benevole/{id}', [CandidatureController::class, 'getBenevoleCandidatures']);

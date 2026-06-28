@@ -36,7 +36,7 @@ class CheckUserLoggedIn
 {
     public function handle(Request $request, Closure $next)
     {
-        // Check token (API) aw session (web)
+        // Check token (API)
         if (!Auth::guard('sanctum')->check() && !Auth::check()) {
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Non authentifié.'], 401);
